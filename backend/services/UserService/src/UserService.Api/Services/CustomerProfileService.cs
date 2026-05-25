@@ -5,6 +5,9 @@ using UserService.Api.Repositories;
 
 namespace UserService.Api.Services;
 
+/// <summary>
+/// Handles profile reads and updates for authenticated users.
+/// </summary>
 public class CustomerProfileService : ICustomerProfileService
 {
     private readonly IUserRepository _repo;
@@ -16,6 +19,7 @@ public class CustomerProfileService : ICustomerProfileService
         _passwordHasher = passwordHasher;
     }
 
+    /// <inheritdoc/>
     public async Task<UserProfileDto?> GetProfileAsync(Guid userId, CancellationToken ct = default)
     {
         var user = await _repo.GetByIdAsync(userId, ct);
@@ -35,6 +39,7 @@ public class CustomerProfileService : ICustomerProfileService
         };
     }
 
+    /// <inheritdoc/>
     public async Task UpdateProfileAsync(Guid userId, UpdateProfileRequest request, CancellationToken ct = default)
     {
         var user = await _repo.GetByIdAsync(userId, ct);
@@ -52,6 +57,7 @@ public class CustomerProfileService : ICustomerProfileService
         await _repo.SaveChangesAsync(ct);
     }
 
+    /// <inheritdoc/>
     public async Task UpdateCredentialsAsync(Guid userId, UpdateCredentialsRequest request, CancellationToken ct = default)
     {
         var user = await _repo.GetByIdAsync(userId, ct);

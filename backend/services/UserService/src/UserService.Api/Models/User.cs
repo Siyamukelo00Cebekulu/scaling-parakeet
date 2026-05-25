@@ -3,6 +3,9 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace UserService.Api.Models;
 
+/// <summary>
+/// Notification preferences available for a user account.
+/// </summary>
 [Flags]
 public enum NotificationPreferences
 {
@@ -11,8 +14,14 @@ public enum NotificationPreferences
     Marketing = 2
 }
 
+/// <summary>
+/// Represents a user account within the UserService API.
+/// </summary>
 public class User
 {
+    /// <summary>
+    /// Primary key for the user.
+    /// </summary>
     [Key]
     public Guid Id { get; set; }
 

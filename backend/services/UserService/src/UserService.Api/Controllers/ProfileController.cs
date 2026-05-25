@@ -6,6 +6,9 @@ using UserService.Api.Services;
 
 namespace UserService.Api.Controllers;
 
+/// <summary>
+/// Provides profile management endpoints for authenticated users.
+/// </summary>
 [ApiController]
 [Route("api/[controller]")]
 [Authorize]
@@ -13,11 +16,17 @@ public class ProfileController : ControllerBase
 {
     private readonly ICustomerProfileService _profileService;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ProfileController"/> class.
+    /// </summary>
     public ProfileController(ICustomerProfileService profileService)
     {
         _profileService = profileService;
     }
 
+    /// <summary>
+    /// Reads the current user's identifier from JWT claims.
+    /// </summary>
     private Guid GetUserId()
     {
         var sub = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue(ClaimTypes.Name) ?? User.FindFirstValue("sub");
@@ -25,6 +34,9 @@ public class ProfileController : ControllerBase
         throw new InvalidOperationException("Unable to determine user id from token");
     }
 
+    /// <summary>
+    /// Gets the current authenticated user's profile.
+    /// </summary>
     [HttpGet]
     public async Task<IActionResult> Get()
     {
@@ -34,6 +46,9 @@ public class ProfileController : ControllerBase
         return Ok(profile);
     }
 
+    /// <summary>
+    /// Updates the current authenticated user's profile fields.
+    /// </summary>
     [HttpPut]
     public async Task<IActionResult> Update([FromBody] UpdateProfileRequest request)
     {
@@ -42,6 +57,9 @@ public class ProfileController : ControllerBase
         return NoContent();
     }
 
+    /// <summary>
+    /// Updates the current authenticated user's credential details.
+    /// </summary>
     [HttpPut("credentials")]
     public async Task<IActionResult> UpdateCredentials([FromBody] UpdateCredentialsRequest request)
     {

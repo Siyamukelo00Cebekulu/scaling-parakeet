@@ -10,6 +10,9 @@ using UserService.Api.Repositories;
 
 namespace UserService.Api.Services;
 
+/// <summary>
+/// Manages user registration, authentication, and refresh token issuance.
+/// </summary>
 public class IdentityService : IIdentityService
 {
     private readonly IUserRepository _repo;
@@ -23,6 +26,7 @@ public class IdentityService : IIdentityService
         _passwordHasher = passwordHasher;
     }
 
+    /// <inheritdoc/>
     public async Task<AuthResponse> RegisterAsync(RegisterRequest request, CancellationToken ct = default)
     {
         var existing = await _repo.GetByUsernameAsync(request.Username, ct);
@@ -45,6 +49,7 @@ public class IdentityService : IIdentityService
         return await GenerateTokensForUserAsync(user, ct);
     }
 
+    /// <inheritdoc/>
     public async Task<AuthResponse> AuthenticateAsync(AuthRequest request, CancellationToken ct = default)
     {
         var user = await _repo.GetByUsernameAsync(request.Username, ct);
@@ -56,6 +61,7 @@ public class IdentityService : IIdentityService
         return await GenerateTokensForUserAsync(user, ct);
     }
 
+    /// <inheritdoc/>
     public async Task<AuthResponse> RefreshAsync(RefreshRequest request, CancellationToken ct = default)
     {
         var existing = await _repo.GetRefreshTokenAsync(request.RefreshToken, ct);

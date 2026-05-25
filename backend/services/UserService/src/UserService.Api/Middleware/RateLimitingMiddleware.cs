@@ -3,6 +3,9 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace UserService.Api.Middleware;
 
+/// <summary>
+/// Middleware that applies simple per-IP rate limiting for incoming HTTP requests.
+/// </summary>
 public class RateLimitingMiddleware
 {
     private readonly RequestDelegate _next;
@@ -11,6 +14,9 @@ public class RateLimitingMiddleware
     private readonly TimeSpan _window;
     private readonly ConcurrentDictionary<string, (int Count, DateTime WindowStart)> _counters = new();
 
+    /// <summary>
+    /// Initializes a new instance of <see cref="RateLimitingMiddleware"/>.
+    /// </summary>
     public RateLimitingMiddleware(RequestDelegate next, IConfiguration config, ILogger<RateLimitingMiddleware> logger)
     {
         _next = next;
@@ -19,6 +25,9 @@ public class RateLimitingMiddleware
         _window = TimeSpan.FromSeconds(config.GetValue<int?>("RateLimiting:WindowSeconds") ?? 60);
     }
 
+    /// <summary>
+    /// Executes rate limiting logic for the current HTTP context.
+    /// </summary>
     public async Task InvokeAsync(HttpContext context)
     {
         var ip = context.Connection.RemoteIpAddress?.ToString() ?? "unknown";
